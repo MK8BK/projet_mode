@@ -171,3 +171,4 @@ cython_debug/
 .pypirc
 
 .projet_modelisation/
+.environnement_mode/
