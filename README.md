@@ -47,6 +47,11 @@ fonctions sont longues et peu factorisees actuellement. il y'a des lignes
 a decommenter afin de voir les differents diagrammes, des indications se trouve
 dans le main.
 
+Le fichier solver.py fournit une fonction de resolution du probleme
+etant donnes une condition initiale. On fournit de plus une fonction
+qui affiche les trois composantes de la solution cote a cote et une
+fonction qui affiche la solution en 3 dimensions (interactives).
+
 Le fichier article_implementation.py est une ebauche. On n'a 
 malheureusement pas reussi a lever les ambiguites de l'article
 quant aux matrices J d'integration et au produit des representations

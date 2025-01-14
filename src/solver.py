@@ -1,79 +1,72 @@
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-
-y0 = [1, 1, 1]  # conditions initiales
-a = 0.9
-b = 0.2
-c = 1.2
-h = 0.
+from problem import f, a, b, c, d
 
 
-def chaotic_finance_system(v, t, a, b, c, h):
-    x, y, z = v
-    dvdt = [z+(y-a)*x, 1-b*y-x**2, -x-c*z+h*z**2]
-    return dvdt
-
-
-def solutions(graph=True):
-    t = np.linspace(0, 6, 1200)
-    sol = odeint(chaotic_finance_system, y0, t, args=(a, b, c, h))
+def solutions(X0, tmax=5, graph=True):
+    t = np.linspace(0, tmax, int(1e6))
+    sol = odeint(f, X0, t)
     x = sol[:, 0]
     y = sol[:, 1]
     z = sol[:, 2]
-    if graph:
-        fig, axs = plt.subplots(2, 2)
-        fig.suptitle(f'Solutions: a={a:.1f} b={b:.1f} c={c:.1f} h={h:.1f}')
-        axs[0, 0].plot(t, x, label='x(t)')
-        axs[0, 0].set_title('x(t)')
-        axs[0, 1].plot(t, y, label='y(t)')
-        axs[0, 1].set_title('y(t)')
-        axs[1, 0].plot(t, z, label='z(t)')
-        axs[1, 0].set_title('z(t)')
-        for row in axs:
-            for ax in row:
-                ax.legend(loc='best')
-                ax.set_xlabel('t')
-                ax.grid()
-        axs[1, 1].remove()
-        plt.show()
-    return x, y, z
+    return t, x, y, z
 
-
-def phase_graph():
-    x_arange = np.linspace(-3, 3, 400)
-    y_arange = np.linspace(-1, 4, 400)
-    z_arange = np.linspace(-1.5, 2, 400)
-
+def graph_solution(t, x, y, z):
     fig, axs = plt.subplots(2, 2)
+    fig.suptitle(f'Solutions: a={a:.2f} b={b:.2f} c={c:.2f} d={d:.2f}')
+    axs[0, 0].plot(t, x, label='x(t)')
+    axs[0, 0].set_title('x(t)')
+    axs[0, 1].plot(t, y, label='y(t)')
+    axs[0, 1].set_title('y(t)')
+    axs[1, 0].plot(t, z, label='z(t)')
+    axs[1, 0].set_title('z(t)')
+    for row in axs:
+        for ax in row:
+            ax.legend(loc='best')
+            ax.set_xlabel('t')
+            ax.grid()
     axs[1, 1].remove()
+    plt.show()
 
-    # rappel: dvdt = [zvalues+(yvalues-a)*xvalues, 1-b*y-x**2, -x-c*z+h*z**2]
+def graph3d_solution(x, y, z, ax=None, show=True):
+    if ax is None:
+        ax = plt.figure().add_subplot(projection='3d')
+    # Prepare arrays x, y, z
+    #print(type(ax))
+    ax.plot(x, y, z, label='solution')
+    ax.legend()
+    if show:
+        plt.show()
+    return ax
 
-    xvalues, yvalues = np.meshgrid(x_arange, y_arange)
-    zvalues = -0.2
-    axs[0, 0].streamplot(xvalues, yvalues, zvalues+(yvalues-a)
-                         * xvalues, 1-b*yvalues-xvalues**2, density=2.5)
-    axs[0, 0].grid()
-    axs[0, 0].set_title('xy')
-
-    xvalues, zvalues = np.meshgrid(x_arange, z_arange)
-    yvalues = 1.75
-    axs[0, 1].streamplot(xvalues, zvalues, zvalues+(yvalues-a)
-                         * xvalues, -xvalues-c*zvalues+h*zvalues**2, density=2.5)
-    axs[0, 1].grid()
-    axs[0, 1].set_title('xz')
-
-    yvalues, zvalues = np.meshgrid(y_arange, z_arange)
-    xvalues = -0.5
-    axs[1, 0].streamplot(yvalues, zvalues, 1-b*yvalues-xvalues **
-                         2, -xvalues-c*zvalues+h*zvalues**2, density=2.5)
-    axs[1, 0].grid()
-    axs[1, 0].set_title('yz')
+def vary_x():
+    X0 = [-1, 2, -0.5]  # conditions initiales
+    t, x, y, z = solutions(X0)
+    ax = graph3d_solution(x, y, z, show=False)
+    for x0 in np.linspace(0, 10, 10):
+        X0 = [x0, 2, -0.5]  # conditions initiales
+        _, x, y, z = solutions(X0)
+        graph3d_solution(x, y, z, ax=ax, show=False)
     plt.show()
 
 
-# x, y, z = solutions_graph()
-# plt.plot(y, z, 'r')
-# plt.show()
-phase_graph()
+def main():
+    #vary_x()
+
+    from stability import equilibrium_points
+    x0bar, x1bar, x2bar, x3bar = equilibrium_points
+    X0 = [1, 1, 1]  # conditions initiales
+
+    X0 = [x+np.random.normal() for x in x2bar]
+
+    t, x, y, z = solutions(X0)
+    graph3d_solution(x, y, z)
+    graph_solution(t, x, y, z)
+
+
+
+if __name__=="__main__":
+    main()
+
+

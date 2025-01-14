@@ -116,7 +116,7 @@ def main():
     # see_x123bar()
     # plot3_axes_phase(x0bar, title=r"Dynamique autour de $\overline{x}_0$", halfrange=5)
     # plot3_axes_phase(x2bar, title=r"Dynamique autour de $\overline{x}_2$", halfrange=5)
-     plot3_axes_phase(x1bar, title=r"Dynamique autour de $\overline{x}_1$", halfrange=5)
+    plot3_axes_phase(x1bar, title=r"Dynamique autour de $\overline{x}_1$", halfrange=5)
     # plot3_axes_phase(x3bar, title=r"Dynamique autour de $\overline{x}_3$", halfrange=5)
 
 

@@ -6,7 +6,7 @@ c = 1.2
 d = 0.02
 
 
-def f(X, *, a=a, b=b, c=c, d=d):
+def f(X, a=a, b=b, c=c, d=d):
     x, y, z = X
     dx = z + (y-a)*x
     dy = 1 - b*y - x**2
