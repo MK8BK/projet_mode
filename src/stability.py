@@ -11,6 +11,7 @@ from numpy import linalg as LA
 roots = roots[abs(roots.imag)<epsilon].real
 
 equilibrium_points = [(Rx(z), Ry(z), z) for z in roots]
+equilibrium_points = sorted(equilibrium_points, key=lambda pe: pe[2])
 
 def Ak(xbar, ybar, zbar):
     return np.array([
