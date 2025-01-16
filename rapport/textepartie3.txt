@@ -1,0 +1,95 @@
+Nous avons fait usage de l'environnement scientifique du 
+langage python afin de resoudre numeriquement les différents
+problèmes rencontrés.
+Les librairies employées sont:
+- Numpy
+- Matplotlib (pour la visualisation)
+- Scipy pour (la résolution numérique des edo)
+
+Le script polynomial_roots.py effectue les calculs approches
+des racines du polynôme P (cf équation (3)). On y emploie la classe
+Polynomial de la librairie Numpy qui permet de créer des instances
+de polynômes à partir de coefficients mais aussi de calculer les 
+racines via la méthode `roots()`. Si exécuté directement, le fichier
+polynomial_roots.py affiche les racines dudit polynome ainsi que
+l'évaluation du polynôme en ces points. Ceci permet de vérifier 
+visuellement de la cohérence des approximations.
+La variable globale
+`roots` contient les valeurs de z possible et 
+est exportable pour la suite des traitements, ce sont les valeurs
+qui apparaissent en (4).
+
+Le script stability.py recupere les valeurs de z possibles ainsi que les polynômes
+Rx et Ry. Les valeurs de z ayant une partie imaginaire non nulle sont abandonnées.
+Les points d'équilibres sont alors calculées (5) et ordonnés par la 3eme coordonne
+pour simplifier les accès ultérieurs. On a alors la variable `equilibrium_points`
+qui contient les 4 points d'équilibres x0,x1,x2,x2 (dans cet ordre). Cette variable
+sera utilisée ultérieurement.
+
+On calcule alors les matrices d'évolutions de systèmes linéaires Ak cf (6).
+Pour chacune de ces matrices on calcule le spectre à l'aide de la fonction linalg.eigen
+de la librairie Numpy.
+Si le fichier stability.py est executé directement, les 4 points d'équilibre sont affichés
+et des assertions sont exécutées afin de vérifier que chacune des quatres matrices a au 
+moins une valeur propre de partie réelle strictement négative, auquel cas un message 
+confirmant cette propriété s'affiche. De plus sont affichés les valeurs de f en ces
+4 points afin d'infirmer visuellement que ce sont bel et bien des points d'équilibres.
+
+Le fichier equilibrium_viz.py presente des fonctions de visualisation preconfigurees
+avec certains paramètres. On peut utiliser par exemple la fonction plot_trajectory_around
+pour tracer en 3 dimensions la dynamique autour d'un point d'équilibre. 
+ des versions préconfigurées
+`see_x123bar()`
+`see_x0bar()`.
+Le point d'équilibre x0 est moins intéressant à visualiser. Les figures
+1 et 2 présentent sous différents points de vue le comportement du système différentiel
+autour des points d'équilibres x1, x2 et x3. Il peut être intéressant de lancer la fonction 
+`see_x123bar()` seule afin d'interagir avec le graphique 3d à l'aide du curseur.
+
+
+Le principe de fonctionnement de ce tracé est simple: on démarre en un point 
+très proche d'un des trois points d'équilibre, et on forme une suite de points
+en suivant à chaque pas la direction donnée par f, c'est une approximation 
+très grossière d'une courbe intégrale.
+Cette fonction est largement inspirée de [lorenz].
+
+La fonction plot3_axes_phase permet de tracer le diagramme de phase autour d'un
+point d'équilibre sous les trois coupes obtenues en fixant à chaque fois un des
+trois paramètres.  les figures 3, 4, 5 et 6 en sont issues. On remarque bien que
+ces trois points d'équilibres sont instables. A nouveau il suffit de décommenter
+les appels préconfigurés pour générer ces 4 graphiques.
+
+[lorenz]: https://matplotlib.org/stable/gallery/mplot3d/lorenz_attractor.html
+
+Le fichier solver.py presente un fonction `solution`
+qui résout notre système augmente etant donnée une condition initiale
+a l'aide de la fonction integrate.odeint de la librairie Scipy.
+
+On fournit de plus 2 fonctions de visualization `graph2d_solution` et
+`graph3d_solution` qui prennent en entrée les paramètres de sortie de
+notre fonction solution et qui affichent respectivement
+les trois fonctions solutions
+et le tracé de la courbe intégrale en 3d (diagramme interactif).
+
+Deux conditions initiales sont considérées dans l'article.
+on observe le comportement de notre système augmente en ces
+deux conditions initiales. La figure 7 est le trace de nos solutions
+pour la condition initiale (1, 1, 1) utilisée dans l'article.
+
+On peut exécuter les appels préconfigurés afin de se faire une idée des 
+solutions pour les deux points de l'article.
+
+On peut aussi explorer les solutions trouvées pour les points d'équilibre.
+
+Du fait de la nature hautement instable de ces points d'équilibres et des 
+erreurs d'approximation lors de leur détermination, la méthode odeint diverge
+brutalement pour tous sauf pour x0bar.
+
+Les fichier problem.py definit les constantes du probleme, il est importée 
+dans tous les autres.
+
+Nous avons tenté d'implémenter la méthode de l'article dans le fichier 
+article_implementation.py, mais les ambiguïtés présentes dans l'article quant
+aux dimensions de la matrice d'intégration nous ont dissuadé d'y investir
+davantage de temps.
+
